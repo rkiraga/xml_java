@@ -19,25 +19,44 @@ public class MOJPARSER extends DefaultHandler{
 	
     private CpeItem cpeitem;
     private ArrayList<CpeItem> cpeItems = new ArrayList<CpeItem>();
+    
+    SAXParserFactory spfac;
+    SAXParser sp;
+    
+   MOJPARSER() throws SAXException, IOException, ParserConfigurationException{
+        spfac = SAXParserFactory.newInstance();
+        sp = spfac.newSAXParser();
+        System.out.println("Czytam plik..........");
+        sp.parse("C:/Users/Radek2/Desktop/official-cpe-dictionary_v2.3.xml", this);
+        this.read();
+    }
 
+    
     /** The main method sets things up for parsing */
     public static void main(String[] args) throws IOException, SAXException,ParserConfigurationException {
-          
-           //Create a "parser factory" for creating SAX parsers
-           SAXParserFactory spfac = SAXParserFactory.newInstance();
-
-           //Now use the parser factory to create a SAXParser object
-           SAXParser sp = spfac.newSAXParser();
-
-           //Create an instance of this class; it defines all the handler methods
-           MOJPARSER handler = new MOJPARSER();
-
-           //Finally, tell the parser to parse the input and notify the handler
-           sp.parse("C:/Users/Radek2/Desktop/official-cpe-dictionary_v2.3.xml", handler);
-          
-           handler.read();
-           
-           ArrayList<CpeItem> lista = handler.search("Adobe", "name");
+     
+    	
+    //&&& WPIEPRZE TO DO KONSTRUKTORA TO BEDZIE LATWIEJ WAM UZYWAC
+    	
+/*	           //Create a "parser factory" for creating SAX parsers
+	           SAXParserFactory spfac = SAXParserFactory.newInstance();
+	
+	           //Now use the parser factory to create a SAXParser object
+	           SAXParser sp = spfac.newSAXParser();
+	
+	           //Create an instance of this class; it defines all the handler methods
+	           MOJPARSER handler = new MOJPARSER();
+	
+	           //Finally, tell the parser to parse the input and notify the handler
+	           sp.parse("C:/Users/Radek2/Desktop/official-cpe-dictionary_v2.3.xml", handler);
+	          
+	          //TO MUSI BYC RAZ WYWOLANE (NA POCZATKU)
+	           handler.read();
+	           
+	          // System.out.println(handler.returnElements(0,10));*/
+    //&&&        
+          //PRZYKLAD SZUKANIA
+          //  ArrayList<CpeItem> lista = handler.search("Adobe", "name");
           // System.out.println(CpeItem.ArrayCpeItemToString(lista));
     }
     
@@ -93,13 +112,14 @@ public class MOJPARSER extends DefaultHandler{
 
     }
     
-    private void read() {
+    void read() {
         System.out.println("Liczba elementow: " + cpeItems.size()  + ".");
         
      //ODKUMENTUJ TRY CATCHA ZEBY DO PLIKU//   try{
-           // PrintWriter writer = new PrintWriter("C:/Users/Radek2/Desktop/ladnyplik.xml", "UTF-8");
-             for(CpeItem i : cpeItems){
-  //DO WYSWIETLENIA NA KONSOLI-> 	// System.out.println(i.toString());
+           // PrintWriter writer = new PrintWriter("C:/Users/Radek2/Desktop/ladnyplik.xml", "UTF-8"); 
+        	for(CpeItem i : cpeItems){
+  //DO WYSWIETLENIA NA KONSOLI-> 	
+            //	  System.out.println(i.toStringLadny());
             //	 writer.println(i.toString());
              }
              //writer.close();
@@ -164,5 +184,13 @@ public class MOJPARSER extends DefaultHandler{
     	
     	return result;
     }
-    
+  
+    public String returnElements(int odKtorego, int ile){
+    	String result="";
+    		
+    		for(int i=odKtorego; i<odKtorego+ile; i++){
+    			result+=cpeItems.get(i).toString();
+    		}
+    	return result;
+    }
 }
